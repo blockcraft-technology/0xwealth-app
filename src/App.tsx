@@ -1,18 +1,22 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Layout from './components/layout/Layout'
+import { Borrow, DCA, Portfolio, Trade } from './pages'
+import { RouteEnums } from './shared/enums/route.enums'
 
-export default function App() {
+
+function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-600 via-yellow-500 to-yellow-400">
-      <Card className="w-full max-w-md bg-yellow-50 border-2 border-yellow-300 shadow-lg shadow-yellow-300/50">
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center text-yellow-800">Welcome to 0xWealth</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-lg text-yellow-700">
-            Hello, World
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Portfolio />} />
+          <Route path={RouteEnums.Trade} element={<Trade />} />
+          <Route path={RouteEnums.DCA} element={<DCA />} />
+          <Route path={RouteEnums.Borrow} element={<Borrow />} />
+        </Route>
+      </Routes>
+    </Router>
   )
 }
+
+export default App
