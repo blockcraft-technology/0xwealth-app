@@ -25,7 +25,7 @@ export default function Layout() {
       <main className="flex-1 overflow-y-auto p-4">
         <Outlet />
       </main>
-      <nav className="bg-green-400 border-t border-green-200">
+      <nav className="bg-green-400 border-t border-green-200 pb-2">
         <ul className="flex justify-around">
           {navItems.map((item) => (
             <li key={item.name} className="flex-1">
