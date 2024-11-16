@@ -39,9 +39,9 @@ export const Portfolio: React.FC = () => {
           className="text-center mb-10"
         >
           <motion.div 
-            initial={{ scale: 0 }}
+            initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+            transition={{ delay: 0.5, type: 'spring', stiffness: 100 }}
             className="text-5xl font-bold text-yellow-400 inline-flex items-center"
           >
             ${totalValue.toLocaleString()}
