@@ -4,34 +4,60 @@ import { DollarSign, TrendingUp } from 'lucide-react'
 import { BackgroundPattern } from "../components/layout/BackgroundPattern"
 import { Slider } from "../components/ui/slider"
 import { MiniKit, Tokens } from '@worldcoin/minikit-js'
+import { useClient } from '../hooks/use-client'
 
 export const Lend: React.FC = () => {
   const [availableUSDC, setAvailableUSDC] = useState(10000)
   const [lendAmount, setLendAmount] = useState(0)
   const maxApy = 0.10
 
+  const{ client } = useClient();
+
   useEffect(() => {
-    setLendAmount(availableUSDC / 2) 
-  }, [availableUSDC])
+    const fetchUSDCBalance = async () => {
+      try {
+        const data = await client.getBalance(`0x7e5aec2b002faca46a278025e0c27b4e481cff24`);
+        const usdcHolding = data.find((item: { symbol: string }) => item.symbol === 'USDC');
+        if (usdcHolding) {
+          setAvailableUSDC(usdcHolding.amount);
+          setLendAmount(0);
+        }
+      } catch (error) {
+        console.error('Error fetching USDC balance:', error);
+      }
+    };
+
+    fetchUSDCBalance();
+  }, [client]);
+
 
   const handleLendChange = (value: number[]) => {
     setLendAmount(value[0])
   }
 
-  const pay = async(amount: number) => {
-    const strAmount = (amount * 10 ** 6).toFixed(0);
+  const confirmLending = async () => {
+    const referenceId = Math.random().toString(36).substring(2, 10);
+    const amount = (Math.ceil(lendAmount) * 10 ** 6).toFixed(0);
+
+    try {
       await MiniKit.commandsAsync.pay({
-        reference: "test", // generate rand str forthis
-        to: "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
+        reference: referenceId,
+        to: '0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce', // Lending pool address
         tokens: [
-            {
-                symbol: Tokens.USDCE,
-                token_amount: '10000000',
-            }
+          {
+            symbol: Tokens.USDCE,
+            token_amount: amount,
+          },
         ],
-        description: 'Lending',
-    })
-  }
+        description: `Lending USDC - Lending ID: ${referenceId}`,
+      });
+      alert(`Successfully lent ${lendAmount} USDC.`);
+    } catch (error) {
+      console.error('Error during lending:', error);
+      alert('Failed to lend USDC. Check console for details.');
+    }
+  };
+
 
   const estimatedApy = (lendAmount / availableUSDC) * maxApy
   const estimatedEarnings = lendAmount * estimatedApy
@@ -75,7 +101,7 @@ export const Lend: React.FC = () => {
             <Slider
               defaultValue={[lendAmount]}
               max={availableUSDC}
-              step={100}
+              step={5}
               onValueChange={handleLendChange}
               className="w-full"
             />
@@ -107,6 +133,7 @@ export const Lend: React.FC = () => {
           className="w-full bg-yellow-500 text-gray-900 font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => confirmLending()}
         >
           Confirm Lending
         </motion.button>
