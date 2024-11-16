@@ -51,10 +51,17 @@ export const Borrow: React.FC = () => {
   }
 
 
+  const calculateBtcToLock = (borrowAmount: number, bitcoinPrice: number, collateralizationRatio: number) => {
+    return borrowAmount / (bitcoinPrice * collateralizationRatio);
+  };
+  
+
   const sendTransaction = async () => {
 
     // calculate how much BTC we need to lock!
-    
+    const btcToLock = calculateBtcToLock(borrowAmount, bitcoinPrice, collateralizationRatio);
+
+    const btcToLockInUnits = (btcToLock * 10 ** 8).toFixed(0);
     if (!MiniKit.isInstalled()) {
       return;
     }
@@ -80,7 +87,7 @@ export const Borrow: React.FC = () => {
                   functionName: "transfer",
                   args: [
                     "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
-                    "6000"
+                    btcToLockInUnits
                   ]
               
               },
@@ -89,7 +96,6 @@ export const Borrow: React.FC = () => {
     } catch (e: any) {
         setDebug({ data: e.toString()});
     }
-
   }
 
   return (
