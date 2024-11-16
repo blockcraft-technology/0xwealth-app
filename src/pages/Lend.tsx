@@ -12,7 +12,7 @@ export const Lend: React.FC = () => {
   const maxApy = 0.10
 
   useEffect(() => {
-    setLendAmount(availableUSDC / 2) // Default to 50% of available USDC
+    setLendAmount(availableUSDC / 2) 
   }, [availableUSDC])
 
   const handleLendChange = (value: number[]) => {

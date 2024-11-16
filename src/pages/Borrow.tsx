@@ -1,18 +1,71 @@
-'use client'
-
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Bitcoin, DollarSign } from 'lucide-react'
 import { BackgroundPattern } from "../components/layout/BackgroundPattern"
 import { Slider } from "../components/ui/slider"
+import { MiniKit, Tokens } from '@worldcoin/minikit-js'
+import { useNavigate } from 'react-router-dom'
 
 export const Borrow: React.FC = () => {
-  const [availableBitcoin, setAvailableBitcoin] = useState(1)
+  const [availableBitcoin, setAvailableBitcoin] = useState(1);
+  const [debug, setDebug] = useState({});
   const [borrowAmount, setBorrowAmount] = useState(0)
   const [repayAmount, setRepayAmount] = useState(0)
   const collateralizationRatio = 0.7
   const apy = 0.12
 
+  const sendTransaction = async () => {
+
+    if (!MiniKit.isInstalled()) {
+      return;
+    }
+
+    // await MiniKit.commandsAsync.pay({
+    //     reference: "test",
+    //     to: "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
+    //     tokens: [
+    //         {
+    //             symbol: Tokens.USDCE,
+    //             token_amount: '10000000',
+    //         }
+    //     ],
+    //     description: 'Lending',
+    // })
+    // return;
+    const tokenAddress = "0x03C7054BCB39f7b2e5B2c7AcB37583e32D70Cfa3";
+    try {
+        await MiniKit.commandsAsync.sendTransaction({
+            transaction: [
+              {
+                address: tokenAddress,
+                abi: [
+                    {
+                      "inputs": [
+                        { "internalType": "address", "name": "recipient", "type": "address" },
+                        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+                      ],
+                      "name": "transfer",
+                      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+                      "stateMutability": "nonpayable",
+                      "type": "function"
+                    }
+                  ],
+                  functionName: "transfer",
+                  args: [
+                    "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
+                    "6000"
+                  ]
+              
+              },
+            ]
+          })
+    } catch (e: any) {
+        setDebug({ data: e.toString()});
+    }
+
+  }
+  
+  
   useEffect(() => {
     const maxBorrowAmount = availableBitcoin * 50000 * collateralizationRatio
     setBorrowAmount(maxBorrowAmount)
@@ -92,12 +145,18 @@ export const Borrow: React.FC = () => {
               </div>
             </div>
           </motion.div>
+          <div>
+            <pre>
+                {JSON.stringify(debug)}
+            </pre>
+          </div>
         </div>
 
         <motion.button 
           className="w-full bg-yellow-500 text-gray-900 font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => sendTransaction()}
         >
           Confirm Borrow
         </motion.button>
