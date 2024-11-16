@@ -1,9 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
+    // darkMode: ["class"],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+      },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
