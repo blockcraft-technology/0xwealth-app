@@ -27,7 +27,7 @@ export const Portfolio: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-            Portfolio
+            Investments
         </motion.h2>
         
         <motion.div 
@@ -53,7 +53,7 @@ export const Portfolio: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <h2 className="text-2xl font-bold mb-8 text-left text-yellow-300">Your Assets</h2>
+          <h2 className="text-2xl font-bold mb-8 text-left text-yellow-300">Assets</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {holdingsData.map((holding, index) => (
               <motion.div
