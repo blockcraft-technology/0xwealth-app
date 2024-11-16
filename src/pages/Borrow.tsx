@@ -5,33 +5,60 @@ import { BackgroundPattern } from "../components/layout/BackgroundPattern"
 import { Slider } from "../components/ui/slider"
 import { MiniKit, Tokens } from '@worldcoin/minikit-js'
 import { useNavigate } from 'react-router-dom'
+import { useClient } from '../hooks/use-client'
 
 export const Borrow: React.FC = () => {
-  const [availableBitcoin, setAvailableBitcoin] = useState(1);
+  const [availableBitcoin, setAvailableBitcoin] = useState(0);
+  const [bitcoinPrice, setBitcoinPrice] = useState(0);
   const [debug, setDebug] = useState({});
   const [borrowAmount, setBorrowAmount] = useState(0)
   const [repayAmount, setRepayAmount] = useState(0)
   const collateralizationRatio = 0.7
   const apy = 0.12
+  const { client } = useClient();
+  
+  useEffect(() => {
+        client.getBalance(`0x7e5aec2b002faca46a278025e0c27b4e481cff24`).then(data => {
+            const btcHolding = data.find((item: { symbol: string }) => item.symbol == 'BTC');
+            setBitcoinPrice(btcHolding.assetPrice);
+            setAvailableBitcoin(btcHolding.amount);
+        });
+  }, []);
+
+
+  
+  
+  
+  useEffect(() => {
+    const maxBorrowAmount = availableBitcoin * bitcoinPrice * collateralizationRatio
+    setBorrowAmount(maxBorrowAmount)
+    setRepayAmount(maxBorrowAmount * (1 + apy))
+  }, [availableBitcoin, bitcoinPrice])
+
+  const handleBorrowChange = (value: number[]) => {
+    const newBorrowAmount = value[0]
+    setBorrowAmount(newBorrowAmount)
+    setRepayAmount(newBorrowAmount * (1 + apy))
+  }
+
+  const dailyInterest = (borrowAmount * apy) / 365
+  const monthlyInterest = (borrowAmount * apy) / 12
+
+  const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 }
+  }
+
 
   const sendTransaction = async () => {
 
+    // calculate how much BTC we need to lock!
+    
     if (!MiniKit.isInstalled()) {
       return;
     }
 
-    // await MiniKit.commandsAsync.pay({
-    //     reference: "test",
-    //     to: "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
-    //     tokens: [
-    //         {
-    //             symbol: Tokens.USDCE,
-    //             token_amount: '10000000',
-    //         }
-    //     ],
-    //     description: 'Lending',
-    // })
-    // return;
     const tokenAddress = "0x03C7054BCB39f7b2e5B2c7AcB37583e32D70Cfa3";
     try {
         await MiniKit.commandsAsync.sendTransaction({
@@ -64,28 +91,6 @@ export const Borrow: React.FC = () => {
     }
 
   }
-  
-  
-  useEffect(() => {
-    const maxBorrowAmount = availableBitcoin * 50000 * collateralizationRatio
-    setBorrowAmount(maxBorrowAmount)
-    setRepayAmount(maxBorrowAmount * (1 + apy))
-  }, [availableBitcoin])
-
-  const handleBorrowChange = (value: number[]) => {
-    const newBorrowAmount = value[0]
-    setBorrowAmount(newBorrowAmount)
-    setRepayAmount(newBorrowAmount * (1 + apy))
-  }
-
-  const dailyInterest = (borrowAmount * apy) / 365
-  const monthlyInterest = (borrowAmount * apy) / 12
-
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
-  }
 
   return (
     <div className="h-[calc(100vh-70px)] bg-gray-900 text-gray-100 font-sans overflow-hidden">
@@ -107,7 +112,7 @@ export const Borrow: React.FC = () => {
               <span className="text-lg font-semibold">Available Bitcoin</span>
             </div>
             <div className="text-2xl font-bold">{availableBitcoin} BTC</div>
-            <div className="text-xs text-gray-400">≈ ${(availableBitcoin * 50000).toLocaleString()} USD</div>
+            <div className="text-xs text-gray-400">≈ ${(availableBitcoin * bitcoinPrice).toLocaleString()} USD</div>
           </motion.div>
 
           <motion.div {...fadeInUp} className="bg-gray-800 rounded-lg p-3">
@@ -118,8 +123,8 @@ export const Borrow: React.FC = () => {
             <div className="text-xs text-gray-400 mb-4">70% of collateral</div>
             <Slider
               defaultValue={[borrowAmount]}
-              max={availableBitcoin * 50000 * collateralizationRatio}
-              step={100}
+              max={availableBitcoin * bitcoinPrice * collateralizationRatio}
+              step={5}
               onValueChange={handleBorrowChange}
               className="w-full"
             />
@@ -145,11 +150,6 @@ export const Borrow: React.FC = () => {
               </div>
             </div>
           </motion.div>
-          <div>
-            <pre>
-                {JSON.stringify(debug)}
-            </pre>
-          </div>
         </div>
 
         <motion.button 

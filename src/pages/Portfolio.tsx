@@ -2,22 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ArrowDownRight, TrendingUp } from 'lucide-react'
 import { BackgroundPattern } from '../components/layout/BackgroundPattern'
-import { Link } from 'react-router-dom'
-import { RouteEnums } from '../shared/enums/route.enums'
-
-const holdingsData = [
-  { id: 1, name: 'Bitcoin', symbol: 'BTC', amount: 0.5, value: 15000, change: 2.5 },
-  { id: 2, name: 'Dollar', symbol: 'USDC', amount: 1000, value: 1000, change: 0 }
-]
+import { useClient } from '../hooks/use-client'
 
 export const Portfolio: React.FC = () => {
   const [totalValue, setTotalValue] = useState(0)
+  const [holdingsData, setHoldingsData] = useState<any>([]);
+  const { client } = useClient();
+  useEffect(() => {
+    client.getBalance("0x7e5aec2b002faca46a278025e0c27b4e481cff24").then(data => {
+        setHoldingsData(data);
+    })
+  }, []);
 
   useEffect(() => {
-    const total = holdingsData.reduce((sum, holding) => sum + holding.value, 0)
+    if (!holdingsData || !holdingsData.length) return;
+    const total = holdingsData.reduce((sum: number, holding: { value: number}) => sum + holding.value, 0)
     setTotalValue(total)
-  }, [])
+  }, [holdingsData])
 
+  if (!holdingsData || !holdingsData.length || holdingsData.length == 0) {
+    return <>Loading</>
+  }
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
       <BackgroundPattern />
@@ -57,7 +62,7 @@ export const Portfolio: React.FC = () => {
         >
           <h2 className="text-2xl font-bold mb-8 text-left text-yellow-300">Assets</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {holdingsData.map((holding, index) => (
+            {holdingsData.map((holding: any, index: any) => (
                 <motion.div
                     key={holding.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -83,12 +88,7 @@ export const Portfolio: React.FC = () => {
                     </div>
                     </div>
                     <div className="text-3xl font-bold text-white mt-2">${holding.value.toLocaleString()}</div>
-                    <div className="mt-4 pt-4 border-t border-gray-700">
-                    <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">24h Change</span>
-                        <span className="font-medium text-yellow-400">+$1,234.56</span>
-                    </div>
-                    </div>
+
                 </motion.div>
             ))}
           </div>

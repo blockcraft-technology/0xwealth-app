@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { DollarSign, TrendingUp } from 'lucide-react'
@@ -19,6 +17,20 @@ export const Lend: React.FC = () => {
     setLendAmount(value[0])
   }
 
+
+      // await MiniKit.commandsAsync.pay({
+    //     reference: "test",
+    //     to: "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
+    //     tokens: [
+    //         {
+    //             symbol: Tokens.USDCE,
+    //             token_amount: '10000000',
+    //         }
+    //     ],
+    //     description: 'Lending',
+    // })
+    // return;
+    
   const estimatedApy = (lendAmount / availableUSDC) * maxApy
   const estimatedEarnings = lendAmount * estimatedApy
   const monthlyEarnings = estimatedEarnings / 12
