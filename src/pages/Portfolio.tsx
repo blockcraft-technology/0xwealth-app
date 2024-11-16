@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import { RouteEnums } from '../shared/enums/route.enums'
 
 const holdingsData = [
-  { id: 1, name: 'Bitcoin', symbol: 'BTC', amount: 0.5, value: 15000, change: 2.5 }
+  { id: 1, name: 'Bitcoin', symbol: 'BTC', amount: 0.5, value: 15000, change: 2.5 },
+  { id: 2, name: 'Dollar', symbol: 'USDC', amount: 1000, value: 1000, change: 0 }
 ]
 
 export const Portfolio: React.FC = () => {
@@ -57,7 +58,6 @@ export const Portfolio: React.FC = () => {
           <h2 className="text-2xl font-bold mb-8 text-left text-yellow-300">Assets</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {holdingsData.map((holding, index) => (
-                <Link to={`${RouteEnums.InvestmentDetails}/${holding.symbol}`}>
                 <motion.div
                     key={holding.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,6 @@ export const Portfolio: React.FC = () => {
                     </div>
                     </div>
                 </motion.div>
-              </Link>
             ))}
           </div>
         </motion.div>
