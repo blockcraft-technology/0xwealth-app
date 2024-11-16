@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ArrowDownRight, TrendingUp } from 'lucide-react'
 import { BackgroundPattern } from '../components/layout/BackgroundPattern'
+import { Link } from 'react-router-dom'
+import { RouteEnums } from '../shared/enums/route.enums'
 
 const holdingsData = [
   { id: 1, name: 'Bitcoin', symbol: 'BTC', amount: 0.5, value: 15000, change: 2.5 },
@@ -37,9 +39,9 @@ export const Portfolio: React.FC = () => {
           className="text-center mb-10"
         >
           <motion.div 
-            initial={{ scale: 0 }}
+            initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+            transition={{ delay: 0.5, type: 'spring', stiffness: 100 }}
             className="text-5xl font-bold text-yellow-400 inline-flex items-center"
           >
             ${totalValue.toLocaleString()}
@@ -56,38 +58,40 @@ export const Portfolio: React.FC = () => {
           <h2 className="text-2xl font-bold mb-8 text-left text-yellow-300">Assets</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {holdingsData.map((holding, index) => (
-              <motion.div
-                key={holding.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 + 0.5 }}
-                className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700 hover:border-yellow-400 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-2xl"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-2xl font-bold text-yellow-400">{holding.name}</h3>
-                    <p className="text-gray-400 text-sm mt-1">{holding.amount} {holding.symbol}</p>
-                  </div>
-                  <div className={`px-3 py-1 rounded-full ${holding.change >= 0 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
-                    {holding.change >= 0 ? (
-                      <ArrowUpRight size={20} className="inline mr-1" aria-hidden="true" />
-                    ) : (
-                      <ArrowDownRight size={20} className="inline mr-1" aria-hidden="true" />
-                    )}
-                    <span className="font-semibold">{Math.abs(holding.change)}%</span>
-                    <span className="sr-only">
-                      {holding.change >= 0 ? 'Increase' : 'Decrease'} of {Math.abs(holding.change)}%
-                    </span>
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-white mt-2">${holding.value.toLocaleString()}</div>
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">24h Change</span>
-                    <span className="font-medium text-yellow-400">+$1,234.56</span>
-                  </div>
-                </div>
-              </motion.div>
+                <Link to={`${RouteEnums.InvestmentDetails}/${holding.symbol}`}>
+                <motion.div
+                    key={holding.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 + 0.5 }}
+                    className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700 hover:border-yellow-400 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-2xl"
+                >
+                    <div className="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 className="text-2xl font-bold text-yellow-400">{holding.name}</h3>
+                        <p className="text-gray-400 text-sm mt-1">{holding.amount} {holding.symbol}</p>
+                    </div>
+                    <div className={`px-3 py-1 rounded-full ${holding.change >= 0 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
+                        {holding.change >= 0 ? (
+                        <ArrowUpRight size={20} className="inline mr-1" aria-hidden="true" />
+                        ) : (
+                        <ArrowDownRight size={20} className="inline mr-1" aria-hidden="true" />
+                        )}
+                        <span className="font-semibold">{Math.abs(holding.change)}%</span>
+                        <span className="sr-only">
+                        {holding.change >= 0 ? 'Increase' : 'Decrease'} of {Math.abs(holding.change)}%
+                        </span>
+                    </div>
+                    </div>
+                    <div className="text-3xl font-bold text-white mt-2">${holding.value.toLocaleString()}</div>
+                    <div className="mt-4 pt-4 border-t border-gray-700">
+                    <div className="flex justify-between text-sm">
+                        <span className="text-gray-400">24h Change</span>
+                        <span className="font-medium text-yellow-400">+$1,234.56</span>
+                    </div>
+                    </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </motion.div>
