@@ -12,7 +12,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Portfolio />} />
               <Route path={RouteEnums.Trade} element={<Trade />} />
-              <Route path={RouteEnums.InvestmentDetails} element={<InvestmentDetails />} />
+              <Route path={`${RouteEnums.InvestmentDetails}/:id`} element={<InvestmentDetails />} />
               <Route path={RouteEnums.DCA} element={<DCA />} />
               <Route path={RouteEnums.Borrow} element={<Borrow />} />
             </Route>
