@@ -1,13 +1,13 @@
 import { Borrow } from "./Borrow";
-import { DCA } from "./DCA";
-import { Trade } from "./Trade";
+import { Lend } from "./Lend";
+import { Activities } from "./Activities";
 import { Portfolio } from "./Portfolio";
 import { InvestmentDetails } from "./InvestmentDetails";
 
 export {
     Borrow,
-    DCA,
-    Trade,
+    Lend,
+    Activities,
     Portfolio,
     InvestmentDetails,
 }

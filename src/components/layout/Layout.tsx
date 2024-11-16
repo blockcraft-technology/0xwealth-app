@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { Briefcase, TrendingUp, RefreshCw, PiggyBank } from 'lucide-react'
+import { Briefcase, TrendingUp, PiggyBank, Activity } from 'lucide-react'
 import { RouteEnums } from '../../shared/enums/route.enums'
 
 interface NavItem {
@@ -15,9 +15,9 @@ export default function Layout() {
 
   const navItems: NavItem[] = [
     { name: 'Portfolio', icon: Briefcase, path: '/' },
-    { name: 'Trade', icon: TrendingUp, path: RouteEnums.Trade },
-    { name: 'DCA', icon: RefreshCw, path: RouteEnums.DCA },
+    { name: 'Lend', icon: TrendingUp, path: RouteEnums.Lend },
     { name: 'Borrow', icon: PiggyBank, path: RouteEnums.Borrow },
+    { name: 'Activities', icon: Activity, path: RouteEnums.Activities },
   ]
 
   return (

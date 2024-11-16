@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
-import { Borrow, DCA, InvestmentDetails, Portfolio, Trade } from './pages'
+import { Borrow, Activities, InvestmentDetails, Portfolio, Lend } from './pages'
 import { RouteEnums } from './shared/enums/route.enums'
 
 
@@ -11,10 +11,10 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Portfolio />} />
-              <Route path={RouteEnums.Trade} element={<Trade />} />
+              <Route path={RouteEnums.Lend} element={<Lend />} />
               <Route path={`${RouteEnums.InvestmentDetails}/:id`} element={<InvestmentDetails />} />
-              <Route path={RouteEnums.DCA} element={<DCA />} />
               <Route path={RouteEnums.Borrow} element={<Borrow />} />
+              <Route path={RouteEnums.Activities} element={<Activities />} />
             </Route>
         </Routes>
         </div>

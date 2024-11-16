@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom'
 import { RouteEnums } from '../shared/enums/route.enums'
 
 const holdingsData = [
-  { id: 1, name: 'Bitcoin', symbol: 'BTC', amount: 0.5, value: 15000, change: 2.5 },
-  { id: 2, name: 'Gold', symbol: 'xAUT', amount: 1000, value: 500, change: 0.8 },
+  { id: 1, name: 'Bitcoin', symbol: 'BTC', amount: 0.5, value: 15000, change: 2.5 }
 ]
 
 export const Portfolio: React.FC = () => {

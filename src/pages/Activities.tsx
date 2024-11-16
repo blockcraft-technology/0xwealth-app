@@ -1,7 +1,7 @@
 import { BackgroundPattern } from "../components/layout/BackgroundPattern"
 import { motion } from 'framer-motion'
 
-export const Borrow: React.FC = () => {
+export const Activities: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
             <BackgroundPattern />
@@ -12,7 +12,7 @@ export const Borrow: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 >
-                    Borrow
+                    Activities
                 </motion.h2>
             </div>
         </div>

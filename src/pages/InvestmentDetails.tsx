@@ -8,7 +8,6 @@ import { Slider } from "../components/ui/slider"
 import { Input } from "../components/ui/input"
 import { Button } from "../components/ui/button"
 
-// Mock data for the asset
 const assetData = {
   name: 'Bitcoin',
   symbol: 'BTC',
