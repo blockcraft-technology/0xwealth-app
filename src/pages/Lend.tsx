@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { DollarSign, TrendingUp } from 'lucide-react'
 import { BackgroundPattern } from "../components/layout/BackgroundPattern"
 import { Slider } from "../components/ui/slider"
+import { MiniKit, Tokens } from '@worldcoin/minikit-js'
 
 export const Lend: React.FC = () => {
   const [availableUSDC, setAvailableUSDC] = useState(10000)
@@ -17,20 +18,21 @@ export const Lend: React.FC = () => {
     setLendAmount(value[0])
   }
 
+  const pay = async(amount: number) => {
+    const strAmount = (amount * 10 ** 6).toFixed(0);
+      await MiniKit.commandsAsync.pay({
+        reference: "test", // generate rand str forthis
+        to: "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
+        tokens: [
+            {
+                symbol: Tokens.USDCE,
+                token_amount: '10000000',
+            }
+        ],
+        description: 'Lending',
+    })
+  }
 
-      // await MiniKit.commandsAsync.pay({
-    //     reference: "test",
-    //     to: "0xeA5FF5250f5aFd7A7E8984a8516a0A5aBd1e16ce",
-    //     tokens: [
-    //         {
-    //             symbol: Tokens.USDCE,
-    //             token_amount: '10000000',
-    //         }
-    //     ],
-    //     description: 'Lending',
-    // })
-    // return;
-    
   const estimatedApy = (lendAmount / availableUSDC) * maxApy
   const estimatedEarnings = lendAmount * estimatedApy
   const monthlyEarnings = estimatedEarnings / 12
