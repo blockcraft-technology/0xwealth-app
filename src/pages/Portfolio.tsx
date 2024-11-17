@@ -34,7 +34,7 @@ export const Portfolio: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-            Investments
+            Portfolio
         </motion.h2>
         
         <motion.div 

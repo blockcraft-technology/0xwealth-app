@@ -4,8 +4,8 @@ import { Bitcoin, Clock } from 'lucide-react'
 import { BackgroundPattern } from "../components/layout/BackgroundPattern"
 import { Button } from "../components/ui/button"
 
-const MIN_SATOSHIS = 100
-const MAX_SATOSHIS = 10000
+const MIN_SATOSHIS = 50
+const MAX_SATOSHIS = 400
 
 export const Activities: React.FC = () => {
   const [isSpinning, setIsSpinning] = useState(false)
@@ -14,6 +14,7 @@ export const Activities: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState('')
 
   useEffect(() => {
+    localStorage.removeItem("nextSpinTime");
     const storedNextSpinTime = localStorage.getItem('nextSpinTime')
     if (storedNextSpinTime) {
       setNextSpinTime(new Date(storedNextSpinTime))
@@ -125,20 +126,6 @@ export const Activities: React.FC = () => {
             </Button>
           )}
         </div>
-
-        <motion.div 
-          className="mt-6 bg-gray-800 rounded-lg p-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="flex items-center mb-2">
-            <Bitcoin className="text-yellow-400 mr-2 h-6 w-6" />
-            <span className="text-xl font-semibold">Your Satoshi Balance</span>
-          </div>
-          <div className="text-3xl font-bold">123,456 sats</div>
-          <div className="text-sm text-gray-400">≈ $50.23 USD</div>
-        </motion.div>
       </div>
     </div>
   )
